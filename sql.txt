@@ -1,0 +1,48 @@
+【SQL構文】
+SELECT ① FROM ② WHERE ③
+①取得したいカラム名 横　全部欲しい時 * 縦を引っ張ってくるとき
+②テーブル名
+③条件 縦 全部欲しい時 where 1 横を引っ張ってくるとき
+
+例1) 全件取得　id,feed,user_id,createdカラムを対象に全レコード取得
+SELECT `id`,`feed`,`user_id` FROM `feeds` WHERE 1
+
+例2) 全カラムを対象にuser_idが13のみ取得
+SELECT * FROM `feeds` WHERE `user_id`=13
+
+【テーブル結合　LEFT JOIN句】
+主役テーブルを左に、参照したいテーブルを右に置くJOIN句
+構文: SELECT ① FROM ② LEFT JOIN ③ ON ④ WHERE ⑤
+①取得したいカラム名
+②主役テーブル　今回は`feeds`
+③参照テーブル　`users`
+④結合条件　（外部キー使用）
+⑤条件
+＊テーブル名が複数出てくるため、カラム名の指定には`feed`,`id`のようにテーブル名からはじめ、ドットで繋ぎカラムを指定
+
+SELECT * FROM `feeds` LEFT JOIN `users` ON `feeds`.`user_id`=`users`.`id` WHERE 1
+
+→④ 結合条件テンプレート
+`主役テーブル`.`外部キー` ＝ `参照テーブル`.`主キー`
+
+テーブルにあるキーについて
+主キー : テーブル内で一意である情報
+外部キー : 参照先の主キー
+
+例3) ONの後の結合条件
+主役テーブル　members
+主キー : id
+外部キー : tweet_id
+
+参照テーブル : tweets
+主キー : id
+
+SELECT ~ ON `members`.`tweet_id`=`tweets`.`id`
+
+【カラムの制限】
+SELECT `feeds`.* , `users`.`name` , `users`.`img_name` FROM `feeds` LEFT JOIN `users` ON `feeds`.`user_id`=`users`.`id` WHERE 1
+
+【テーブル名のエイリアス AS句】
+使い方:`テーブル名` AS `別名`
+SELECT * FROM `feeds` AS `f` LEFT JOIN `users` AS `u`
+SELECT f.* , u.name , u.img_name FROM feeds AS f LEFT JOIN users AS u ON f.user_id=u.id WHERE 1
