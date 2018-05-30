@@ -15,6 +15,7 @@
   $stmt = $dbh->prepare($sql);
   $stmt->execute($data);
   
+  
   //一覧に戻る
   header('Location: timeline.php');
 

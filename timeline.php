@@ -51,6 +51,18 @@
       }
     }
 
+    $page = ''; //ページ番号が入る変数
+    $page_row_number = 5;
+ 
+    if (isset($_GET['page'])){
+      $page = $_GET['page'];
+    }else{
+      //get送信されてるページ数がない場合、1ページとみなす
+      $page = 1;
+    }
+    $start = ($page-1)*$page_row_number;
+
+
     //検索ボタンが押されたら、あいまい検索
     //検索ボタンが押された＝GET送信されたsearch_wordというキーデータがある
     if (isset($_GET['search_word']) == true){
@@ -64,7 +76,7 @@
     // LEFT JOINで全件取得
     //複数のテーブルがある時のカラム名の書き方,カラムの一部読み出し,テーブルのリネーム,順番の指定 ORDER BY
     //テーブルの正規化、テーブルを分けて管理すること。
-    $sql = 'SELECT `f`.*, `u`.`name` , `u`.`img_name` FROM `feeds` AS `f` LEFT JOIN `users` AS `u` ON `f`.`user_id` = `u`.`id` WHERE 1 ORDER BY `f`.`created` DESC';
+    $sql = "SELECT `f`.*, `u`.`name` , `u`.`img_name` FROM `feeds` AS `f` LEFT JOIN `users` AS `u` ON `f`.`user_id` = `u`.`id` WHERE 1 ORDER BY `f`.`created` DESC LIMIT $start,$page_row_number";
     //WHERE 1は無条件で引き出せる　WHEREなくても良い
     //``は省くことができる。データベースで囲まれたところは``
     }
@@ -98,7 +110,7 @@
     $feeds = array(); //while文に入れてしまうと毎回初期化されるので意味ない
 
     while (true) {
-        $record["like_cnt"] = 77;
+        // $record["like_cnt"] = 77;
 
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -205,7 +217,7 @@
       <div class="collapse navbar-collapse" id="navbar-collapse1">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">タイムライン</a></li>
-          <li><a href="#">ユーザー一覧</a></li>
+          <li><a href="user_index.php">ユーザー一覧</a></li>
         </ul>
         <form method="GET" action="" class="navbar-form navbar-left" role="search">
           <div class="form-group">
@@ -318,8 +330,14 @@
 
         <div aria-label="Page navigation">
           <ul class="pager">
-            <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
-            <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+            <!-- 押して欲しくないときはdisabledをクラスに追加 -->
+            <?php if ($page == 1) { ?>
+            <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Newer</a></li>
+            <?php }else{ ?>
+            <li class="previous"><a href="timeline.php?page=<?php echo $page - 1 ?>"><span aria-hidden="true">&larr;</span>Newer</a></li>
+            <?php } ?>
+
+            <li class="next"><a href="timeline.php?page=<?php echo $page + 1 ?>">Older<span aria-hidden="true">&rarr;</span></a></li>
           </ul>
         </div>
       </div>

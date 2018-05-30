@@ -8,18 +8,17 @@
 
   
     //SQL文作成
-    //$sql = 'SELECT `feeds`.*, `users`.`name` , `users`.`img_name` , `users`.`created` FROM `feeds` LEFT JOIN `users` ON `feeds`.`user_id` = `users`.`id` WHERE 1 ORDER BY `feeds`.`created` DESC';
+    $sql = 'SELECT * FROM `users` WHERE 1';
 
     //SELECT COUNT(feed) FROM `feeds` WHERE `user_id`=20
 
-    $sql='SELECT * FROM `users` WHERE 1';
     //SQL文実行
     $data = array();
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
 
     //繰り返し文の中でフェッチ(配列の保存)
-    $feeds = array();
+    $users = array();
 
     while (true) {
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -27,9 +26,31 @@
         if ($record == false) {
             break;
         }
-        $feeds[] = $record;
+        //つぶやき数を取得するSQL文を作成
+        //COUNT(*)をfeed_cntと定義し直している
+        $feed_sql = "SELECT COUNT(*) AS `feed_cnt` FROM `feeds` WHERE `user_id`=?";
+
+        //今回は$record["id"]はusersテーブル、timelineではfeedsテーブル
+        $feed_data = array($record["id"]);
+
+        //SQL文を実行
+        $feed_stmt = $dbh->prepare($feed_sql);
+        $feed_stmt->execute($feed_data);
+
+        //つぶやき数を取得するSQL文を作成
+        $feed = $feed_stmt->fetch(PDO::FETCH_ASSOC);
+        //$feed = array("feed_cnt"=>5);
+        $record["feed_cnt"] = $feed["feed_cnt"];
+        //いいね取り消し
+
+        //
+        $users[] = $record;
+
       }
     //データ保存した配列を表示で使用する
+      //echo '<pre>';
+      //var_dump($users);
+      //echo '<pre>';
 
 
 ?>
@@ -79,24 +100,24 @@
   </nav>
 
   <div class="container">
-    <?php foreach($feeds as $feed){?>
+    <?php foreach($users as $user){?>
     <div class="row">
       <div class="col-xs-12">
 
           <div class="thumbnail">
             <div class="row">
               <div class="col-xs-1">
-                <img src="user_profile_img/<?php echo $feeds['img_name']; ?>" width="80">
+                <img src="user_profile_img/<?php echo $user['img_name']; ?>" width="80">
               </div>
               <div class="col-xs-11">
-                <?php echo $feeds['name']; ?><br>
-                <a href="#" style="color: #7F7F7F;"><?php echo $feeds['created']; ?></a>
+                <?php echo $user['name']; ?><br>
+                <a href="#" style="color: #7F7F7F;"><?php echo $user['created']; ?></a>
               </div>
             </div>
             
             <div class="row feed_sub">
               <div class="col-xs-12">
-                <span class="comment_count">つぶやき数 : 5</span>
+                <span class="comment_count">つぶやき数 : <?php echo $user["feed_cnt"]; ?></span>
               </div>
             </div>
           </div><!-- thumbnail -->
