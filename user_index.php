@@ -110,7 +110,7 @@
                 <img src="user_profile_img/<?php echo $user['img_name']; ?>" width="80">
               </div>
               <div class="col-xs-11">
-                <?php echo $user['name']; ?><br>
+                <a href="profile.php?user_id=<?php echo $user["id"] ?>"><?php echo $user['name']; ?></a><br>
                 <a href="#" style="color: #7F7F7F;"><?php echo $user['created']; ?></a>
               </div>
             </div>

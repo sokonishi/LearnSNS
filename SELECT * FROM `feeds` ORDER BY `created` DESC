@@ -1,0 +1,20 @@
+SELECT * FROM `feeds` ORDER BY `created` DESC
+
+$pageに今表示するページ番号が代入されている
+$page=1; //1ページ目
+$page=2; //2ページ目
+$page=3; //3ページ目
+
+$start = ($page-1)*5;
+
+//最初の５件
+SELECT * FROM `feeds` ORDER BY `created` DESC LIMIT 0,5
+
+//LIMIT句の使い方
+LIMIT取得を開始したい場所（0から始まる）,取得したい件数
+
+//次の5件
+SELECT * FROM `feeds` ORDER BY `created` DESC LIMIT 5,5
+
+//次の5件
+SELECT * FROM `feeds` ORDER BY `created` DESC LIMIT 

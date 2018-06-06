@@ -150,7 +150,6 @@
             <?php if (isset($errors['email']) && $errors['email'] == 'duplicate') { ?>
               <p class="text-danger">すでに登録してされているメールアドレスです</p>
             <?php } ?>
-
           </div>
 
           <div class="form-group">
