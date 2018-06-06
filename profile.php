@@ -45,7 +45,7 @@
   //var_dump($signin_user);
   //----------ここまで--------------
 
-  //following一覧の作り方
+  //-----following一覧の作り方------
   //今表示されている、プロフィールイメージの人がフォローしている
   //フォロワーの情報をusersテーブルから引っ張りたいから`fw`.`follower_id` = `u`.`id`
   $following_sql = 'SELECT `fw`.* ,`u`.`name`,`u`.`img_name`,`u`.`created` FROM `followers` AS `fw` LEFT JOIN `users` AS `u` ON `fw`.`follower_id` = `u`.`id` WHERE `user_id`=?';
@@ -65,7 +65,7 @@
   }
   //var_dump($following);
 
-  //follower一覧の取得
+  //-------follower一覧の取得-------
   $followers_sql = 'SELECT `fw`.* ,`u`.`name`,`u`.`img_name`,`u`.`created` FROM `followers` AS `fw` LEFT JOIN `users` AS `u` ON `fw`.`user_id` = `u`.`id` WHERE `follower_id`=?';
   $followers_data = array($user_id);
   $followers_stmt = $dbh->prepare($followers_sql);
@@ -73,15 +73,26 @@
 
   $followers = array();
 
+  $follow_flag = 0;
+  //ログインユーザーが今見てるプロフィールページの人をフォローしたら1、フォローしてなかったら0
+
   while (true) {
     $followers_record = $followers_stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($followers_record == false){
       break;
     } 
+
+    //フォロワーの中に、ログインしている人がいるかをチェック
+    if ($followers_record['user_id'] == $_SESSION['id']){
+      $follow_flag = 1;
+    }
+
     $followers[] = $followers_record;
   }
-
+  //echo '<pre>';
+  //var_dump($followers);
+  //echo '<pre>';
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +131,7 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="user_profile_img/<?php echo $signin_user['img_name'] ?>" width="18" class="img-circle"><?php echo $signin_user['name'] ?> <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">マイページ</a></li>
+              <li><a href="profile.php">マイページ</a></li>
               <li><a href="signout.php">サインアウト</a></li>
             </ul>
           </li>
@@ -134,7 +145,20 @@
       <div class="col-xs-3 text-center">
         <img src="user_profile_img/<?php echo $profile_user['img_name'] ?>" class="img-thumbnail" />
         <h2><?php echo $profile_user['name'] ?></h2>
-        <button class="btn btn-default btn-block">フォローする</button>
+
+        <?php if ($user_id != $_SESSION["id"]){ ?>
+
+          <?php if ($follow_flag == 0) {?>
+            <a href="follow.php?follower_id=<?php echo $profile_user['id'] ?>">
+            <button class="btn btn-default btn-block">フォローする</button>
+            </a>
+          <?php } else { ?>
+            <a href="#">
+            <button class="btn btn-default btn-block">フォロー解除</button>
+            </a>
+          <?php } ?>
+        <?php } ?>
+
       </div>
 
       <div class="col-xs-9">
@@ -156,8 +180,9 @@
                   <img src="user_profile_img/<?php echo $follower_user['img_name'] ?>" width="80">
                 </div>
                 <div class="col-xs-10">
-                  <?php echo $follower_user['name'] ?><br>
-                  <a href="#" style="color: #7F7F7F;">2018-05-29 10:00:00からメンバー</a>
+                  <a href="profile.php?user_id=<?php echo $follower_user['user_id'] ?>">
+                  <?php echo $follower_user['name'] ?></a><br>
+                  <a href="#" style="color: #7F7F7F;"><?php echo $follower_user['created'] ?></a>
                 </div>
               </div>
             </div>
@@ -174,7 +199,8 @@
                     <img src="user_profile_img/<?php echo $follow['img_name'] ?>" width="80">
                   </div>
                   <div class="col-xs-10">
-                    <?php echo $follow['name'] ?><br>
+                    <a href="profile.php?user_id=<?php echo $follow['follower_id'] ?>">
+                    <?php echo $follow['name'] ?></a><br>
                     <a href="#" style="color: #7F7F7F;"><?php echo $follow['created'] ?></a>
                   </div>
                 </div>
