@@ -4,9 +4,21 @@
     //DB接続
     require('dbconnect.php');
 
-    //ユーザーの一覧を表示するため取得する
+    //------function-----
+    require('function.php');
+    //サインインしている人の情報を取得
+    $signin_user = get_signin_user($dbh,$_SESSION["id"]);
+    //------ここまで------
 
-  
+    //$sql = 'SELECT * FROM `users` WHERE `id`=?';
+    //$data = array($_SESSION['id']);
+    //$stmt = $dbh->prepare($sql);
+    //$stmt->execute($data);
+    //$signin_userに取り出したレコードを代入する
+    //$signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+    //ユーザーの一覧を表示するため取得する
     //SQL文作成
     $sql = 'SELECT * FROM `users` WHERE 1';
 
@@ -64,7 +76,8 @@
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body style="margin-top: 60px; background: #E4E6EB;">
-    <nav class="navbar navbar-default navbar-fixed-top">
+
+  <!-- <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse1" aria-expanded="false">
@@ -97,7 +110,9 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
+
+  <?php include("navbar.php") ?>
 
   <div class="container">
     <?php foreach($users as $user){?>

@@ -4,15 +4,20 @@
 
     //echo "<br>うまくいってなかったら、header関数を止めて確認するんだよ";
     require('dbconnect.php');
+    require('function.php');
 
+    $signin_user = get_signin_user($dbh,$_SESSION["id"]);
+    //-----navbar.php/function.phpにて省略-------
     // SELECT users テーブルから　$_SESSIONに保存されているidを使って一件だけ取り出す
-    $sql = 'SELECT * FROM `users` WHERE `id`=?';
-    $data = array($_SESSION['id']);
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
+    //今のログインしている人の情報を受け取る
+    //$sql = 'SELECT * FROM `users` WHERE `id`=?';
+    //$data = array($_SESSION['id']);
+    //$stmt = $dbh->prepare($sql);
+    //$stmt->execute($data);
 
     // $signin_userに取り出したレコードを代入する
-    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    //$signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    //----------ここまで------------
 
     // 写真と名前をレコードから取り出す
 
@@ -258,6 +263,7 @@
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8">
   <title>Learn SNS</title>
@@ -265,8 +271,11 @@
   <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
+
 <body style="margin-top: 60px; background: #E4E6EB;">
-  <div class="navbar navbar-default navbar-fixed-top">
+
+  <!-- ヘッダー部分をincludeを使って省略 -->
+<!--   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse1" aria-expanded="false">
@@ -290,7 +299,7 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="user_profile_img/<?php echo $signin_user['img_name']; ?>" width="18" class="img-circle"><?php echo $signin_user['name']; ?><span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="user_profile_img/?php echo $signin_user['img_name']; ?>" width="18" class="img-circle">?php echo $signin_user['name']; ?><span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="profile.php">マイページ</a></li>
               <li><a href="signout.php">サインアウト</a></li>
@@ -299,7 +308,9 @@
         </ul>
       </div>
     </div>
-  </div>
+  </nav>
+ -->
+  <?php include("navbar.php") ?>
 
   <div class="container">
     <div class="row">
