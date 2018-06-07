@@ -23,6 +23,6 @@
     $stmt->execute($data);
 
     //一覧に戻る
-    header("Location: profile.php?user_id=".follower_id);
+    header("Location: profile.php?user_id=".$follower_id);
 
 ?>

@@ -307,13 +307,13 @@
         <ul class="nav nav-pills nav-stacked">
 
           <?php if (isset($_GET["feed_select"]) && ($_GET["feed_select"] == "likes")){ ?>
-          <li><a href="timeline.php?feed_select=news">新着順</a></li>
+            <li><a href="timeline.php?feed_select=news">新着順</a></li>
 
-          <li class="active"><a href="timeline.php?feed_select=likes">いいね！済み</a></li>
+            <li class="active"><a href="timeline.php?feed_select=likes">いいね！済み</a></li>
           <?php } else { ?>
-          <li class="active"><a href="timeline.php?feed_select=news">新着順</a></li>
+            <li class="active"><a href="timeline.php?feed_select=news">新着順</a></li>
 
-          <li><a href="timeline.php?feed_select=likes">いいね！済み</a></li>
+            <li><a href="timeline.php?feed_select=likes">いいね！済み</a></li>
           <?php } ?>
 
           <!-- <li><a href="timeline.php?feed_select=follows">フォロー</a></li> -->
@@ -376,7 +376,7 @@
 
                   <!-- いいねを表示するかしないか -->
                 <?php if(!$feed["like_cnt"] == 0) { ?>
-                <span class="like_count">いいね数 : <?php echo $feed["like_cnt"]; ?></span>
+                  <span class="like_count">いいね数 : <?php echo $feed["like_cnt"]; ?></span>
                 <?php } ?>
 
               <!---  コメント機能実装　collapseCommentに飛ぶが一意ではないのでidを追加-->
@@ -419,15 +419,15 @@
           <ul class="pager">
             <!-- 押して欲しくないときはdisabledをクラスに追加 -->
             <?php if ($page == 1) { ?>
-            <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Newer</a></li>
+              <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>Newer</a></li>
             <?php }else{ ?>
-            <li class="previous"><a href="timeline.php?page=<?php echo $page - 1 ?>"><span aria-hidden="true">&larr;</span>Newer</a></li>
+              <li class="previous"><a href="timeline.php?page=<?php echo $page - 1 ?>"><span aria-hidden="true">&larr;</span>Newer</a></li>
             <?php } ?>
 
             <?php if ($page == $all_page_number) {?>
-            <li class="next disabled"><a href="#">Older<span aria-hidden="true">&rarr;</span></a></li>
+              <li class="next disabled"><a href="#">Older<span aria-hidden="true">&rarr;</span></a></li>
             <?php }else{ ?>
-            <li class="next"><a href="timeline.php?page=<?php echo $page + 1 ?>">Older<span aria-hidden="true">&rarr;</span></a></li>
+              <li class="next"><a href="timeline.php?page=<?php echo $page + 1 ?>">Older<span aria-hidden="true">&rarr;</span></a></li>
             <?php } ?>
           </ul>
         </div>

@@ -83,7 +83,7 @@
       break;
     } 
 
-    //フォロワーの中に、ログインしている人がいるかをチェック
+    //フォロワーの中に、ログインしている人がいるかをチェック----------?????????---------
     if ($followers_record['user_id'] == $_SESSION['id']){
       $follow_flag = 1;
     }
@@ -146,15 +146,16 @@
         <img src="user_profile_img/<?php echo $profile_user['img_name'] ?>" class="img-thumbnail" />
         <h2><?php echo $profile_user['name'] ?></h2>
 
+        <!-- ここで自分のアカウントの場合を排除する -->
         <?php if ($user_id != $_SESSION["id"]){ ?>
 
           <?php if ($follow_flag == 0) {?>
             <a href="follow.php?follower_id=<?php echo $profile_user['id'] ?>">
-            <button class="btn btn-default btn-block">フォローする</button>
+              <button class="btn btn-default btn-block">フォローする</button>
             </a>
           <?php } else { ?>
-            <a href="#">
-            <button class="btn btn-default btn-block">フォロー解除</button>
+            <a href="unfollow.php?follower_id=<?php echo $profile_user['id'] ?>">
+              <button class="btn btn-default btn-block">フォロー解除</button>
             </a>
           <?php } ?>
         <?php } ?>
@@ -174,18 +175,18 @@
         <div class="tab-content">
           <div id="tab1" class="tab-pane fade in active">
             <?php foreach ($followers as $follower_user){?>
-            <div class="thumbnail">
-              <div class="row">
-                <div class="col-xs-2">
-                  <img src="user_profile_img/<?php echo $follower_user['img_name'] ?>" width="80">
-                </div>
-                <div class="col-xs-10">
-                  <a href="profile.php?user_id=<?php echo $follower_user['user_id'] ?>">
-                  <?php echo $follower_user['name'] ?></a><br>
-                  <a href="#" style="color: #7F7F7F;"><?php echo $follower_user['created'] ?></a>
+              <div class="thumbnail">
+                <div class="row">
+                  <div class="col-xs-2">
+                    <img src="user_profile_img/<?php echo $follower_user['img_name'] ?>" width="80">
+                  </div>
+                  <div class="col-xs-10">
+                    <a href="profile.php?user_id=<?php echo $follower_user['user_id'] ?>">
+                    <?php echo $follower_user['name'] ?></a><br>
+                    <a href="#" style="color: #7F7F7F;"><?php echo $follower_user['created'] ?></a>
+                  </div>
                 </div>
               </div>
-            </div>
             <?php } ?>
             
           </div>
